@@ -10,8 +10,8 @@ class UsersService {
     );
     
 
-    getAllUsersPrice = (vs_currency,startDate,endDate) =>
-    apiClient().get(`/coins/bitcoin/market_chart/range?vs_currency=${vs_currency}&from=${startDate}&to=${endDate}`
+    getAllUsersPrice = (coin,startDate,endDate) =>
+    apiClient().get(`/coins/${coin}/market_chart/range?vs_currency=usd&from=${startDate}&to=${endDate}`
     );
 
     getAllExchangeRates=()=>apiClient().get(`/exchange_rates`);

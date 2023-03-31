@@ -2,12 +2,15 @@ import React, { useState, useEffect, useRef } from 'react';
 import UsersService from '../services/users.service';
 import BarChart from '../components/BarChart';
 import LineChart from '../components/LineChart';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 function MyComponent() {
   const [chartData, setChartData] = useState(null);
   const [error, setError] = useState(null);
   const [graph,setGraph]=useState('LineChart');
   const vs_currency = 'usd'; 
+  let currencies='bitcoin';
   
   const[startDate,setStartDate]=useState("1640995200");
   const[endDate,setEndDate]=useState("1662057599");
@@ -52,7 +55,7 @@ function MyComponent() {
   
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
-      let currencies;
+     
       if (currency === 'bitcoin')
         currencies = 'btc';
       else if (currency === 'tether')
@@ -62,14 +65,17 @@ function MyComponent() {
         
       if (currencies === 'btc,usd') {
         Promise.all([
-          UsersService.getAllUsersPrice('btc', startDate, endDate),
-          UsersService.getAllUsersPrice('usd', startDate, endDate)
+          UsersService.getAllUsersPrice('bitcoin', startDate, endDate),
+          UsersService.getAllUsersPrice('tether', startDate, endDate)
         ]).then(([response1, response2]) => {
+          console.log(response1);
+          console.log(response2);
           const marketChart1 = response1.data.prices.map(([date, price]) => ({ date, price }));
           const marketChart2 = response2.data.prices.map(([date, price]) => ({ date, price }));
           const marketChart = marketChart1.concat(marketChart2);
           const labels = {};
           const chartData = {
+            title: 'usd',
             labels: marketChart2.reduce((acc, item) => {
               let date = new Date(item.date);
               if (!isNaN(date.getTime())) {
@@ -83,11 +89,11 @@ function MyComponent() {
             }, []),
             datasets: [
               {
-                label: 'Prices',
+                label: 'Bitcoin',
                 data: marketChart1.map((item) => item.price),
               },
               {
-                label: 'Price',
+                label: 'Tether',
                 data: marketChart2.map((item) => item.price),
               },
             ],
@@ -100,10 +106,14 @@ function MyComponent() {
       
 
       else{
+        if(currencies==='btc') currencies='bitcoin';
+        if(currencies==='usd') currencies='tether';
     UsersService.getAllUsersPrice(currencies,startDate,endDate)
       .then((response) => {
+        console.log(response);
         const marketChart = response.data.prices.map(([date, price]) => ({ date, price }));
         const chartData = {
+          title:'usd',
           labels: marketChart.map((item) => {
             if(chartLabel=='1D'){
                 return new Date(item.date).toLocaleDateString();
@@ -120,7 +130,7 @@ function MyComponent() {
           }),
           datasets: [
             {
-              label: 'Prices',
+              label: currencies,
               data: marketChart.map((item) => item.price),
             },
           ],
@@ -149,6 +159,30 @@ function MyComponent() {
     <button onClick={handleoneWeekClick}>1W</button>
     <button onClick={handleoneMonthClick}>1M</button>
     <button onClick={handleoneYearClick}>1y</button>
+    <DatePicker 
+  selected={new Date(startDate * 1000)} 
+  onChange={(date)=> {
+    const timestamp = Math.floor(date.getTime() / 1000); // convert to Unix timestamp in seconds
+    setStartDate(timestamp)
+  }} 
+  selectsStart
+  startDate={new Date(startDate * 1000)}
+  endDate={new Date(endDate * 1000)}
+/>
+
+    
+    <DatePicker 
+  selected={new Date(endDate * 1000)} 
+  onChange={(date)=> {
+    const timestamp = Math.floor(date.getTime() / 1000); // convert to Unix timestamp in seconds
+    setEndDate(timestamp)
+  }} 
+  selectsEnd
+  startDate={new Date(startDate * 1000)}
+  endDate={new Date(endDate * 1000)}
+/>
+
+    
     <select onChange={handleCurrencyChange}>
       <option>Crytocurrency</option>
       <option  value='bitcoin'>Bitcoin</option>
@@ -160,9 +194,9 @@ function MyComponent() {
       <option value='BarChart'>BarChart</option>
       <option value='LineChart'>LineChart</option>
     </select>
-{graph==='BarChart' && chartData && <BarChart chartData={chartData}key={`${startDate}-${endDate}`} />}
-{graph==='LineChart' && chartData && <LineChart chartData={chartData}key={`${startDate}-${endDate}`} />}
-
+{graph==='BarChart' && chartData && <BarChart chartData={chartData}key={`${startDate}-${endDate}`}title="usd" />}
+{graph==='LineChart' && chartData && <LineChart chartData={chartData}key={`${startDate}-${endDate}`}title="usd" />}
+<label>usd</label>
   </div>
   );
 }
