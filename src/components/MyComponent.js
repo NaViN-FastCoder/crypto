@@ -39,6 +39,12 @@ function MyComponent() {
     setStartDate(endDate-newDate);
     setChartLabel('1W')
   }
+  const handlesixMonthClick=()=>{
+    const newDate=180*24*60*60;
+    setStartDate(endDate-newDate);
+    setChartLabel('6M')
+  }
+  
   
   const handleCurrencyChange = (event) => {
     const value = event.target.value;
@@ -121,6 +127,19 @@ function MyComponent() {
             else if(chartLabel=='1W'){
                 return new Date(item.date).toLocaleDateString(undefined,{month:'short',day:'numeric'})
             }
+            else if (chartLabel == '6M') {
+              const date = new Date(item.date);
+              const year = date.getFullYear();
+              const month = date.toLocaleString('default', { month: 'short' });
+              return `${month} ${year}`;
+            }
+            
+            else if (chartLabel == '1M') {
+              const date = new Date(item.date);
+              const year = date.getFullYear();
+              const month = date.toLocaleString('default', { month: 'short' });
+              return `${month} ${year}`;
+            }
             
             else{
             const date = new Date(item.date);
@@ -158,7 +177,9 @@ function MyComponent() {
     <button onClick={handleoneDayClick}>1D</button>
     <button onClick={handleoneWeekClick}>1W</button>
     <button onClick={handleoneMonthClick}>1M</button>
+    <button onClick={handlesixMonthClick}>6M</button>
     <button onClick={handleoneYearClick}>1y</button>
+    
     <DatePicker 
   selected={new Date(startDate * 1000)} 
   onChange={(date)=> {
@@ -194,9 +215,10 @@ function MyComponent() {
       <option value='BarChart'>BarChart</option>
       <option value='LineChart'>LineChart</option>
     </select>
+    <label>usd</label>
 {graph==='BarChart' && chartData && <BarChart chartData={chartData}key={`${startDate}-${endDate}`}title="usd" />}
 {graph==='LineChart' && chartData && <LineChart chartData={chartData}key={`${startDate}-${endDate}`}title="usd" />}
-<label>usd</label>
+
   </div>
   );
 }
