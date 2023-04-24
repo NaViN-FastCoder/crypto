@@ -4,6 +4,7 @@ import { Chart as ChartJS } from 'chart.js/auto';
 
 function BarChart({chartData}) {
   return (
+    //calling react-chart-js barchart 
     <div><Bar data={chartData}/></div>
   )
 }

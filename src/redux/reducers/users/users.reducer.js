@@ -1,8 +1,10 @@
 import actionTypes from "./users.actionTypes";
 import initialState from "./users.initialState";
 
+//creating reducers and initializing to the initial state for middlewares in redux store
 const usersReducer = (state = initialState, { type, payload }) => {
 	switch (type) {
+		//if data from api is in process
 		case actionTypes.USERS_LOAD_START:
 			return {
 				...state,
@@ -10,14 +12,14 @@ const usersReducer = (state = initialState, { type, payload }) => {
 				users: null,
 				errorMessage: null,
 			};
-
+			//if data from api fetched successfully
 		case actionTypes.USERS_LOAD_SUCCESS:
 			return {
 				...state,
 				isLoading: false,
 				users: payload,
 			};
-
+			//if data from api failed then handle the error
 		case actionTypes.USERS_LOAD_ERROR:
 			return {
 				...state,

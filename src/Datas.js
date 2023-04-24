@@ -1,3 +1,4 @@
+//data for holdings form
 const data = {
     Euro: '$375',
     Bitcoin: '$375',

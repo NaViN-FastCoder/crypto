@@ -1,3 +1,4 @@
+//creating initial state
 export default {
 	
 	

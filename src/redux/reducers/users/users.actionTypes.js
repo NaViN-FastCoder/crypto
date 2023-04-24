@@ -1,3 +1,4 @@
+//exporting actiontypes to the middlewares
 export default {
 	USERS_LOAD_START: "USERS_LOAD_START",
 	USERS_LOAD_SUCCESS: "USERS_LOAD_SUCCESS",

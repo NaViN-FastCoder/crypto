@@ -1,17 +1,16 @@
 import React, { useState } from 'react'
 import HoldingsForm from './components/HoldingsForm';
+import './index.css'
 
 function App() {
   
   return (
     <div className="App">
-        <div style={{width:700}}>
-       
-        
+        {/**calling holdings form component */}
         <HoldingsForm />
         
        
-        </div>
+        
     </div>
   )
 }

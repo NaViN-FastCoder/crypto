@@ -1,5 +1,6 @@
+//importing actiontypes 
 import actionTypes from "./users.actionTypes";
-
+//actions for redux store
 const usersLoadStart = () => ({
 	type: actionTypes.USERS_LOAD_START,
 });
